@@ -3,6 +3,7 @@ const express=require('express');
 const app= express();
 const path= require('path');
 const mongoose = require('mongoose');
+const ejsMate= require('ejs-mate')
 const campGround= require('./models/campground')
 const methodOverride= require('method-override')
 
@@ -11,6 +12,7 @@ app.use(express.urlencoded({ extended: true })); // for parsing application/x-ww
 //app.use(express.json({ extended: true }));
 
 //set path for views
+app.engine('ejs', ejsMate)
 app.set('views',path.join(__dirname, '/views'));
 app.set('view engine', 'ejs');
 
