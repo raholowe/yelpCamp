@@ -3,6 +3,7 @@ const Schema =mongoose.Schema;
 
 const campGroundSchema= new Schema({
   title: String,
+  image:  String,
   price: Number,
   description: String,
   location: String
