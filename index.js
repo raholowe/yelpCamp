@@ -9,7 +9,8 @@ const methodOverride= require('method-override')
 const catchAsync= require('./utils/catchAsync')
 const ExpressError= require('./utils/ExpressError')
 const { title } = require('process');
-const {campgroundSchema}= require('./schemas')
+const {campgroundSchema, reviewSchema}= require('./schemas')
+const Review= require('./models/review')
 
 app.use(methodOverride('_method'));
 app.use(express.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
@@ -48,6 +49,19 @@ const validateCampground=(req,res,next)=>{
  
 }
 
+const validateReview=(req,res,next)=>{
+  const {error}= reviewSchema.validate(req.body)
+  
+  if(error){
+    const msg=error.details.map(el=>el.message).join(',')
+    throw new ExpressError(msg, 400)
+  }
+  else{
+    next();
+  }
+
+}
+
 //test Connection
 app.get('/',(req,res)=>{
   res.render('home')
@@ -77,7 +91,7 @@ app.post('/campgrounds/new', validateCampground,catchAsync(async(req,res)=>{
 //initial view specific campground route
 app.get('/campgrounds/:id', catchAsync(async (req,res)=>{
   const {id}= req.params
-  const camp= await campGround.findById(id)
+  const camp= await campGround.findById(id).populate('reviews')
   res.render('campgrounds/show',{camp})
 }))
 
@@ -101,6 +115,25 @@ app.delete('/campgrounds/:id',catchAsync(async(req,res)=>{
   const {id}= req.params
   const camp= await campGround.findByIdAndDelete(id)
   res.redirect('/campgrounds')
+}))
+
+
+//Route for reviews
+//post new Reveiw
+app.post('/campgrounds/:id/review',validateReview, catchAsync(async (req,res)=>{
+  const campground= await campGround.findById(req.params.id);
+  const review = new Review(req.body.review)
+  campground.reviews.push(review)
+  await review.save()
+  await campground.save()
+  res.redirect(`/campgrounds/${campground.id}`)
+}))
+//delete review and remove the refrence from the campground
+app.delete('/campgrounds/:id/review/:reviewId', catchAsync(async(req,res,)=>{
+  await campGround.findByIdAndUpdate(req.params.id, {$pull: {reviews: req.params.reviewId}})
+  await Review.findByIdAndDelete(req.params.reviewId)
+  res.redirect(`/campgrounds/${req.params.id}`)
+  
 }))
 
 app.all('*' ,(req,res,next)=>{
