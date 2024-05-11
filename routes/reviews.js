@@ -27,12 +27,14 @@ router.post('/',validateReview, catchAsync(async (req,res)=>{
   campground.reviews.push(review)
   await review.save()
   await campground.save()
+  req.flash('success',"Review Created")
   res.redirect(`/campgrounds/${campground.id}`)
 }))
 //delete review and remove the refrence from the campground
 router.delete('/:reviewId', catchAsync(async(req,res,)=>{
   await campGround.findByIdAndUpdate(req.params.id, {$pull: {reviews: req.params.reviewId}})
   await Review.findByIdAndDelete(req.params.reviewId)
+  req.flash('success','Successfully Deleted Review')
   res.redirect(`/campgrounds/${req.params.id}`)
   
 }))

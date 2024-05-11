@@ -4,6 +4,7 @@ const app= express();
 const path= require('path');
 const mongoose = require('mongoose');
 const session = require('express-session')
+const flash= require('connect-flash')
 const ejsMate= require('ejs-mate')
 const campGround= require('./models/campground')
 const methodOverride= require('method-override')
@@ -19,8 +20,7 @@ app.use(express.static(path.join(__dirname, 'public')))
 app.use(methodOverride('_method'));
 app.use(express.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
 //app.use(express.json({ extended: true }));
-app.use('/campgrounds', campgrounds)
-app.use('/campgrounds/:id/review', reviews)
+
 
 const sessionConfig ={
   secret: 'tempSecret',
@@ -33,8 +33,15 @@ const sessionConfig ={
   }
 }
 app.use(session(sessionConfig))
+app.use(flash())
+app.use((req,res,next)=>{
+  res.locals.success=req.flash('success')
+  res.locals.error=req.flash('error')
+  next()
+})
 
-
+app.use('/campgrounds', campgrounds)
+app.use('/campgrounds/:id/review', reviews)
 
 //set path for views
 app.engine('ejs', ejsMate)

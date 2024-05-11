@@ -37,6 +37,7 @@ router.get('/new',(req,res)=>{
 router.post('/new', validateCampground,catchAsync(async(req,res)=>{
   const camp= new campGround(req.body.campground)
   await camp.save()
+  req.flash('success',"Successfully Added Campground")
   res.redirect(`/campgrounds/${camp.id}`)
 }))
 
@@ -45,6 +46,10 @@ router.post('/new', validateCampground,catchAsync(async(req,res)=>{
 router.get('/:id', catchAsync(async (req,res)=>{
   const {id}= req.params
   const camp= await campGround.findById(id).populate('reviews')
+  if (!camp){
+    req.flash('error',"Campground does not exist")
+    res.redirect('/campgrounds')
+  }
   res.render('campgrounds/show',{camp})
 }))
 
@@ -60,6 +65,7 @@ router.put('/:id',validateCampground,catchAsync( async(req,res,next)=>{
   
   const {id}= req.params
   const camp= await campGround.findByIdAndUpdate(id,{...req.body.campground},{runValidators:true, new:true})
+  req.flash('success', 'Successfully Updated Campground')
   res.redirect(`/campgrounds/${camp.id}`)
   
 
