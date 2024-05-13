@@ -4,6 +4,7 @@ const catchAsync= require('../utils/catchAsync')
 const ExpressError= require('../utils/ExpressError')
 const campGround= require('../models/campground')
 const {campgroundSchema, reviewSchema}= require('../schemas')
+const {isLoggedin}=require('../middleware')
 
 //Validate the Data being sent to the database for a new campground
 const validateCampground=(req,res,next)=>{
@@ -29,12 +30,13 @@ const validateCampground=(req,res,next)=>{
 }))
 
 //view the create new campoground page
-router.get('/new',(req,res)=>{
+router.get('/new',isLoggedin,(req,res)=>{
+
   res.render('campgrounds/new')
 })
 
 //add a new campground to the database and show it
-router.post('/new', validateCampground,catchAsync(async(req,res)=>{
+router.post('/new',isLoggedin, validateCampground,catchAsync(async(req,res)=>{
   const camp= new campGround(req.body.campground)
   await camp.save()
   req.flash('success',"Successfully Added Campground")
@@ -54,14 +56,14 @@ router.get('/:id', catchAsync(async (req,res)=>{
 }))
 
 //update a camp ground page
-router.get('/:id/edit', catchAsync(async (req,res)=>{
+router.get('/:id/edit',isLoggedin, catchAsync(async (req,res)=>{
   const {id}= req.params
   const camp= await campGround.findById(id)
   res.render(`campgrounds/edit`,{camp})
 }))
 
 //update the campground in the database then show
-router.put('/:id',validateCampground,catchAsync( async(req,res,next)=>{
+router.put('/:id',isLoggedin,validateCampground,catchAsync( async(req,res,next)=>{
   
   const {id}= req.params
   const camp= await campGround.findByIdAndUpdate(id,{...req.body.campground},{runValidators:true, new:true})
@@ -71,7 +73,7 @@ router.put('/:id',validateCampground,catchAsync( async(req,res,next)=>{
 
 }))
 
-router.delete('/:id',catchAsync(async(req,res)=>{
+router.delete('/:id',isLoggedin,catchAsync(async(req,res)=>{
   const {id}= req.params
   const camp= await campGround.findByIdAndDelete(id)
   res.redirect('/campgrounds')
