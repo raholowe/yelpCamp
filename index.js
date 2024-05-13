@@ -13,9 +13,12 @@ const ExpressError= require('./utils/ExpressError')
 const { title } = require('process');
 const {campgroundSchema, reviewSchema}= require('./schemas')
 const Review= require('./models/review')
-const campgrounds= require('./routes/campgrounds')
-const reviews= require('./routes/reviews')
-
+const campgroundsRoutes= require('./routes/campgrounds')
+const reviewsRoutes= require('./routes/reviews')
+const usersRoutes=require('./routes/user')
+const passport= require('passport')
+const LocalPassport= require('passport-local')
+const User= require('./models/user')
 app.use(express.static(path.join(__dirname, 'public')))
 app.use(methodOverride('_method'));
 app.use(express.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
@@ -32,16 +35,24 @@ const sessionConfig ={
     maxAge:1000*60*60*24*7
   }
 }
-app.use(session(sessionConfig))
-app.use(flash())
+app.use(session(sessionConfig));
+app.use(flash());
+app.use(passport.initialize());
+app.use(passport.session());
+passport.use(new LocalPassport(User.authenticate()));
+
+passport.serializeUser(User.serializeUser())
+passport.deserializeUser(User.deserializeUser())
+
 app.use((req,res,next)=>{
   res.locals.success=req.flash('success')
   res.locals.error=req.flash('error')
   next()
 })
 
-app.use('/campgrounds', campgrounds)
-app.use('/campgrounds/:id/review', reviews)
+app.use('/campgrounds', campgroundsRoutes)
+app.use('/campgrounds/:id/review', reviewsRoutes)
+app.use('/', usersRoutes)
 
 //set path for views
 app.engine('ejs', ejsMate)
@@ -60,6 +71,12 @@ db.once("open", ()=>{
   console.log("Database Connected")
 })
 
+//just a fake user creator
+app.get('/fakeuser', async (req,res)=>{
+  const user= new User({email: 'test@test.com', username:'test'})
+  const newuser= await User.register(user, 'password')
+  res.send(newuser)
+})
 
 //test Connection
 app.get('/',(req,res)=>{
