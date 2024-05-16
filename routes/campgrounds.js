@@ -35,7 +35,8 @@ router.post('/new',isLoggedin, validateCampground,catchAsync(async(req,res)=>{
 //initial view specific campground route
 router.get('/:id', catchAsync(async (req,res)=>{
   const {id}= req.params
-  const camp= await campGround.findById(id).populate('reviews').populate('author')
+  const camp= await campGround.findById(id).populate({path:'reviews',populate:{path:'author'}}).populate('author')
+  console.log(camp)
   if (!camp){
     req.flash('error',"Campground does not exist")
     res.redirect('/campgrounds')
