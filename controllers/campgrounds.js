@@ -14,8 +14,10 @@ module.exports.new =(req,res)=>{
 //create and add campground to database
 module.exports.Createnew =async(req,res)=>{
   const camp= new Campground(req.body.campground)
+  camp.images=req.files.map((f)=>({url:f.path, filename:f.filename}))
   camp.author= req.user._id
   await camp.save()
+  console.log(camp)
   req.flash('success',"Successfully Added Campground")
   res.redirect(`/campgrounds/${camp.id}`)
 }
@@ -24,7 +26,6 @@ module.exports.Createnew =async(req,res)=>{
 module.exports.showCampground=async (req,res)=>{
   const {id}= req.params
   const camp= await Campground.findById(id).populate({path:'reviews',populate:{path:'author'}}).populate('author')
-  console.log(camp)
   if (!camp){
     req.flash('error',"Campground does not exist")
     res.redirect('/campgrounds')

@@ -5,6 +5,9 @@ const ExpressError= require('../utils/ExpressError')
 const campgrounds= require('../controllers/campgrounds')
 const {campgroundSchema, reviewSchema}= require('../schemas')
 const {isLoggedin,isAuthor,validateCampground}=require('../middleware')
+const multer = require('multer')
+const {storage}= require('../cloudinary/index')
+const upload = multer({storage})
 
 
 
@@ -14,7 +17,11 @@ const {isLoggedin,isAuthor,validateCampground}=require('../middleware')
  //add a new campground to the database and show it
  //view the create new campoground page
  router.route('/new')
-  .post(isLoggedin, validateCampground,catchAsync(campgrounds.Createnew))
+  .post(isLoggedin,upload.array('image') ,validateCampground,catchAsync(campgrounds.Createnew))
+  // .post(upload.array('image'), (req,res)=>{
+  //   console.log( req.body, req.files)
+  //   res.send('itworked')
+  // })
   .get(isLoggedin,campgrounds.new)
   
 //initial view specific campground route
