@@ -3,40 +3,64 @@
 
   <div class=" row">
     <div class="col-6 ">
-      <div class="card mb-2">
-        <% for (let image of camp.images){ %>
-          <img src="<%=image.url%>" class="card-img-top" alt="...">
-          <% } %>
-            <div class="card-body">
-              <h5 class="card-title">
-                <%=camp.title %>
-              </h5>
-              <p class="card-text">
-                <%=camp.description %>
-              </p>
+
+
+      <div id="carouselExample" class="carousel slide">
+        <div class="carousel-inner">
+          <% camp.images.forEach((img, i)=> { %>
+            <div class="carousel-item <%=i===0?'active':'' %>">
+              <img src="<%=img.url%>" class="d-block w-100" alt="...">
             </div>
-            <ul class="list-group list-group-flush">
-              <li class="list-group-item">
-                <%=camp.location%>
-              </li>
-              <li class="list-group-item">
-                <%=camp.author.username%>
-              </li>
-              <li class="list-group-item">
-                $<%=camp.price%> /night
-              </li>
-            </ul>
-            <% if (currentUser && camp.author.equals(currentUser._id)) {%>
-              <div class="card-body">
-                <a href="/campgrounds/<%=camp.id  %>/edit" class="card-link btn btn-primary">Edit</a>
-                <form class="d-inline" action="/campgrounds/<%=camp.id  %>?_method=DELETE" method="post">
-                  <button class="btn btn-danger">DELETE</button>
-                </form>
-              </div>
-              <% } %>
+
+            <% })%>
+        </div>
+        <% if (camp.images.length>1){ %>
+          <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+          </button>
+          <button class="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+          </button>
+          <% } %>
       </div>
 
+
+
+
+      <div class="card mb-2">
+        <div class="card-body">
+          <h5 class="card-title">
+            <%=camp.title %>
+          </h5>
+          <p class="card-text">
+            <%=camp.description %>
+          </p>
+        </div>
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item">
+            <%=camp.location%>
+          </li>
+          <li class="list-group-item">
+            <%=camp.author.username%>
+          </li>
+          <li class="list-group-item">
+            $<%=camp.price%> /night
+          </li>
+        </ul>
+        <% if (currentUser && camp.author.equals(currentUser._id)) {%>
+          <div class="card-body">
+            <a href="/campgrounds/<%=camp.id  %>/edit" class="card-link btn btn-primary">Edit</a>
+            <form class="d-inline" action="/campgrounds/<%=camp.id  %>?_method=DELETE" method="post">
+              <button class="btn btn-danger">DELETE</button>
+            </form>
+          </div>
+          <% } %>
+      </div>
     </div>
+
+
     <div class="col-6">
       <% if(currentUser) {%>
         <h2>Leave A Review</h2>
@@ -82,6 +106,7 @@
               </div>
               <% } %>
             </div>
-
     </div>
+
+  </div>
   </div>

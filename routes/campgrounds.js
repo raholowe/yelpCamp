@@ -18,10 +18,6 @@ const upload = multer({storage})
  //view the create new campoground page
  router.route('/new')
   .post(isLoggedin,upload.array('image') ,validateCampground,catchAsync(campgrounds.Createnew))
-  // .post(upload.array('image'), (req,res)=>{
-  //   console.log( req.body, req.files)
-  //   res.send('itworked')
-  // })
   .get(isLoggedin,campgrounds.new)
   
 //initial view specific campground route
@@ -29,7 +25,7 @@ const upload = multer({storage})
 //delete the campground from the database
 router.route('/:id')
   .get(catchAsync(campgrounds.showCampground))
-  .put(isLoggedin,isAuthor,validateCampground,catchAsync(campgrounds.updateCampground ))
+  .put(isLoggedin,isAuthor,upload.array('image'),validateCampground,catchAsync(campgrounds.updateCampground ))
   .delete(isLoggedin, isAuthor,catchAsync(campgrounds.destroyCampground))
 
 //update a camp ground page
