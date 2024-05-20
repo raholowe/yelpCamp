@@ -1,10 +1,11 @@
 <% layout('layouts/boilerplate') %>
   <link rel="stylesheet" href="/styles/stars.css">
 
+
   <div class=" row">
     <div class="col-6 ">
 
-
+      
       <div id="carouselExample" class="carousel slide">
         <div class="carousel-inner">
           <% camp.images.forEach((img, i)=> { %>
@@ -62,6 +63,7 @@
 
 
     <div class="col-6">
+      <div id='map' style='width: 400px; height: 300px;'></div>
       <% if(currentUser) {%>
         <h2>Leave A Review</h2>
         <form action="/campgrounds/<%=camp.id  %>/review" novalidate method="POST" class="mb-3 validated-form">
@@ -110,3 +112,11 @@
 
   </div>
   </div>
+
+  <script>
+
+    const mtoken = '<%-process.env.MAPBOX_TOKEN%>'
+    const campground = <%-JSON.stringify(camp) %>
+  </script>
+
+  <script src="/js/showPageMap.js"></script>

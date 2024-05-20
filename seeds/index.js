@@ -28,6 +28,8 @@ const seedDatabse = async ()=>{
       title:`${samp(descriptors)} ${samp(places)}`,
       description:  'Lorem ipsum dolor sit amet consectetur adipisicing elit. Dignissimos quia deserunt ut. Eveniet sapiente totam vitae, facilis reiciendis necessitatibus commodi quaerat similique! Tenetur, atque! Pariatur tempora veritatis doloremque vero unde?',
       price: price,
+      geolocation: { type: 'Point', 
+      coordinates: [ -119.571615, 37.737363 ] },
       images:[
         {
           url: 'https://res.cloudinary.com/dzpdeyqbr/image/upload/v1716156226/YelpCamp/tcpoknn05g24iqx7fuld.jpg',
