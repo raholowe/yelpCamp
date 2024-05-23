@@ -23,7 +23,7 @@ module.exports.Createnew =async(req,res)=>{
     limit:1
   }).send()
   const camp= new Campground(req.body.campground)
-  camp.geolocation= geoData.body.features[0].geometry
+  camp.geometry= geoData.body.features[0].geometry
   camp.images=req.files.map((f)=>({url:f.path, filename:f.filename}))
   camp.author= req.user._id
   await camp.save()

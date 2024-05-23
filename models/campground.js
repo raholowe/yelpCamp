@@ -12,10 +12,12 @@ imageSchema.virtual('thumbnail').get(function(){
   return this.url.replace('/upload','/upload/w_200')
 })
 
+const opts= {toJSON: { virtuals:true}}
+
 const campGroundSchema= new Schema({
   title: String,
   images:  [imageSchema],
-  geolocation:{
+  geometry:{
     type:{
       type:String,
       enum:['Point'],
@@ -37,7 +39,12 @@ const campGroundSchema= new Schema({
     type: Schema.Types.ObjectId,
     ref:'User'
   }
-});
+},opts);
+
+campGroundSchema.virtual('properties.popUpMarkup').get(function(){
+  return` <a href="/campgrounds/${this.id}">${this.title} </a>
+  <p>${this.description.substring(0,20)}...</p>`
+})
 
 campGroundSchema.post('findOneAndDelete', async function(doc){
   if (doc){
