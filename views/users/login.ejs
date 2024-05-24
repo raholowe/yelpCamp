@@ -1,16 +1,31 @@
 <% layout('layouts/boilerplate') %>
-  <h1>Login</h1>
 
-  <form action="/login" method="POST" class="validated-form">
-    <div class="mb-3">
-      <label class="form-label" for="username">Username:</label>
-      <input class="form-control" type="text" name="username" id="username" required>
+  <div class="container justify-content-center mt-3">
+    <div class="row">
+      <div class="col-md-6 offset-md-3">
+        <div class="card shadow  ">
+          <img src="https://images.unsplash.com/photo-1601134917279-ef70a0a90f18?q=80&w=3870&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" class="card-img-top" alt="...">
+          <h2 class="card-title">Login:</h2>
+          <form action="/login" method="POST" class="validated-form p-3">
+            <div class="mb-3">
+              <label class="form-label" for="username">Username:</label>
+              <input class="form-control" type="text" name="username" id="username" autofocus required>
+            </div>
+            <div class="mb-3">
+              <label class="form-label" for="location">Password:</label>
+              <input class="form-control" type="password" name="password" id="password" required>
+            </div>
+            <div class="d-grid ">
+              <button class="btn btn-primary btn-block">Login</button>
+            </div>
+          </form>
+        </div>
+
+      </div>
     </div>
-    <div class="mb-3">
-      <label class="form-label" for="location">Password:</label>
-      <input class="form-control" type="password" name="password" id="password" required>
-    </div>
-    <div class="mb-3">
-      <button class="btn btn-primary">Login</button>
-    </div>
-  </form>
+  </div>
+
+
+
+
+  
