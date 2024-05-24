@@ -22,10 +22,12 @@ const usersRoutes=require('./routes/user')
 const passport= require('passport')
 const LocalPassport= require('passport-local')
 const User= require('./models/user')
+const mongoSanitize = require('express-mongo-sanitize');
 app.use(express.static(path.join(__dirname, 'public')))
 app.use(methodOverride('_method'));
 app.use(express.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
 //app.use(express.json({ extended: true }));
+app.use(mongoSanitize());
 
 
 const sessionConfig ={
@@ -48,6 +50,7 @@ passport.serializeUser(User.serializeUser())
 passport.deserializeUser(User.deserializeUser())
 
 app.use((req,res,next)=>{
+  console.log(req.query)
   res.locals.currentUser=req.user;
   res.locals.success=req.flash('success')
   res.locals.error=req.flash('error')
