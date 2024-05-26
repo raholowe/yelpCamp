@@ -12,6 +12,10 @@ imageSchema.virtual('thumbnail').get(function(){
   return this.url.replace('/upload','/upload/w_200')
 })
 
+imageSchema.virtual('cardimg').get(function(){
+  return this.url.replace('/upload','/upload/c_fill,h_400,w_600')
+})
+
 const opts= {toJSON: { virtuals:true}}
 
 const campGroundSchema= new Schema({
