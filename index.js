@@ -35,7 +35,7 @@ app.use(mongoSanitize());
 
 const store=MongoStore.create({
   mongoUrl: dbUrl,
-  secret:'tempsecret',
+  secret: process.env.SECRET,
   touchAfter: 24 * 3600
 })
 store.on('error', function(e){
@@ -46,7 +46,7 @@ store.on('error', function(e){
 const sessionConfig ={
   store,
   name:'session',
-  secret: 'tempSecret',
+  secret: process.env.SECRET,
   resave:false,
   saveUninitialized:true,
   cookie:{
