@@ -2,7 +2,7 @@
 
 ## Live View
 To view live site go to https://ryanyelpcamp.onrender.com/ 
-May take upto a minute for hosting to wake up if the page has not been viseted in a while.
+May take upto a minute for hosting to wake up if the page has not been visited in a while.
 ## Home Screen
 
 <img width="1917" alt="home screen" src="https://github.com/raholowe/yelpCamp/assets/37389270/949db7db-ed07-456d-b46f-7bd4830900de">
